@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="equipment_accounting_system.Windows.EquipmentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Добавить/Редактировать оборудование"
+    PrimaryButtonText="Сохранить"
+    CloseButtonText="Отмена"
+    DefaultButton="Primary"
+    x:Name="EquipmentDialogControl">
+    
+    <ScrollViewer>
+        <StackPanel Margin="0,10,0,0">
+            <TextBlock x:Name="ErrorTextBlock" 
+                       Foreground="Red" 
+                       TextWrapping="Wrap"
+                       Visibility="Collapsed"
+                       Margin="0,0,0,10"/>
+            
+            <ComboBox x:Name="BaseTypeComboBox" 
+                      Header="Категория оборудования:"
+                      Margin="0,0,0,15"
+                      SelectionChanged="BaseTypeComboBox_SelectionChanged">
+                <ComboBoxItem Content="Компьютерное оборудование" Tag="Computer"/>
+                <ComboBoxItem Content="Офисное оборудование" Tag="Office"/>
+                <ComboBoxItem Content="Мобильное оборудование" Tag="Mobile"/>
+            </ComboBox>
+
+            <ComboBox x:Name="EquipmentTypeComboBox" 
+                      Header="Тип оборудования:"
+                      Margin="0,0,0,15"
+                      SelectionChanged="EquipmentTypeComboBox_SelectionChanged"
+                      IsEnabled="False">
+            </ComboBox>
+
+            <TextBox x:Name="NameTextBox" Header="Название:" PlaceholderText="Введите название" Margin="0,0,0,15"/>
+            <TextBox x:Name="ManufacturerTextBox" Header="Производитель:" PlaceholderText="Введите производителя" Margin="0,0,0,15"/>
+            <NumberBox x:Name="PriceNumberBox" Header="Цена:" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+            <DatePicker x:Name="PurchaseDatePicker" Header="Дата покупки:" Margin="0,0,0,15"/>
+            <TextBox x:Name="LocationTextBox" Header="Местоположение:" PlaceholderText="Введите местоположение" Margin="0,0,0,15"/>
+            <ComboBox x:Name="StatusComboBox" Header="Статус:" Margin="0,0,0,15">
+                <ComboBoxItem Content="В эксплуатации" IsSelected="True"/>
+                <ComboBoxItem Content="На ремонте"/>
+                <ComboBoxItem Content="Списано"/>
+                <ComboBoxItem Content="Резерв"/>
+            </ComboBox>
+
+            <!-- Специфические поля для компьютерного оборудования -->
+            <StackPanel x:Name="ComputerFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="ProcessorTextBox" Header="Процессор:" PlaceholderText="Введите процессор" Margin="0,0,0,15"/>
+                <NumberBox x:Name="RAMNumberBox" Header="ОЗУ (ГБ):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <NumberBox x:Name="StorageNumberBox" Header="Накопитель (ГБ):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <TextBox x:Name="OSTextBox" Header="Операционная система:" PlaceholderText="Введите ОС" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Специфические поля для офисного оборудования -->
+            <StackPanel x:Name="OfficeFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="CategoryTextBox" Header="Категория:" PlaceholderText="Принтер, Сканер и т.д." Margin="0,0,0,15"/>
+                <NumberBox x:Name="PrintSpeedNumberBox" Header="Скорость печати (стр/мин):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="IsColorCheckBox" Content="Цветная печать" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Дополнительные поля для сетевого оборудования -->
+            <StackPanel x:Name="NetworkFieldsPanel" Visibility="Collapsed">
+                <NumberBox x:Name="PortCountNumberBox" Header="Количество портов:" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <TextBox x:Name="ConnectionTypeTextBox" Header="Тип подключения:" PlaceholderText="Ethernet, Wi-Fi и т.д." Margin="0,0,0,15"/>
+                <NumberBox x:Name="MaxSpeedNumberBox" Header="Максимальная скорость (Мбит/с):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Специфические поля для серверного оборудования -->
+            <StackPanel x:Name="ServerFieldsPanel" Visibility="Collapsed">
+                <NumberBox x:Name="RackUnitNumberBox" Header="Высота в стойке (U):" Value="1" Minimum="1" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="IsRedundantPowerSupplyCheckBox" Content="Резервное питание" Margin="0,0,0,15"/>
+                <NumberBox x:Name="NetworkPortsNumberBox" Header="Сетевые порты:" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <TextBox x:Name="ServerTypeTextBox" Header="Тип сервера:" PlaceholderText="Tower, Rack, Blade" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Специфические поля для мобильного оборудования -->
+            <StackPanel x:Name="MobileFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="ScreenSizeTextBox" Header="Размер экрана (дюймы):" PlaceholderText="10.1" Margin="0,0,0,15"/>
+                <NumberBox x:Name="BatteryCapacityNumberBox" Header="Емкость батареи (мАч):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasSIMCardCheckBox" Content="SIM-карта" Margin="0,0,0,15"/>
+                <TextBox x:Name="MobileOSTextBox" Header="Операционная система:" PlaceholderText="Android, iOS и т.д." Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Дополнительные поля для принтера -->
+            <StackPanel x:Name="PrinterFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="PrinterTypeTextBox" Header="Тип принтера:" PlaceholderText="Лазерный, Струйный, Матричный" Margin="0,0,0,15"/>
+                <NumberBox x:Name="MaxPaperSizeNumberBox" Header="Макс. размер бумаги (A):" Value="4" Minimum="3" Maximum="5" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasDuplexCheckBox" Content="Двусторонняя печать" Margin="0,0,0,15"/>
+                <NumberBox x:Name="CartridgeCountNumberBox" Header="Количество картриджей:" Value="1" Minimum="1" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для настольного компьютера -->
+            <StackPanel x:Name="DesktopFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="FormFactorTextBox" Header="Форм-фактор:" PlaceholderText="Mini-ITX, Micro-ATX, ATX, Tower" Margin="0,0,0,15"/>
+                <NumberBox x:Name="PowerSupplyNumberBox" Header="Блок питания (Вт):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <NumberBox x:Name="ExpansionSlotsNumberBox" Header="Слотов расширения:" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasOpticalDriveCheckBox" Content="Оптический привод" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для ноутбука -->
+            <StackPanel x:Name="LaptopFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="LaptopScreenSizeTextBox" Header="Размер экрана (дюймы):" PlaceholderText="15.6" Margin="0,0,0,15"/>
+                <NumberBox x:Name="BatteryLifeNumberBox" Header="Время работы от батареи (ч):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <NumberBox x:Name="WeightNumberBox" Header="Вес (кг):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasTouchscreenCheckBox" Content="Сенсорный экран" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для рабочей станции -->
+            <StackPanel x:Name="WorkstationFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="GraphicsCardTextBox" Header="Видеокарта:" PlaceholderText="Введите модель видеокарты" Margin="0,0,0,15"/>
+                <NumberBox x:Name="VRAMNumberBox" Header="Видеопамять (ГБ):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasECCCheckBox" Content="ECC память" Margin="0,0,0,15"/>
+                <NumberBox x:Name="MaxRAMNumberBox" Header="Макс. ОЗУ (ГБ):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для сканера -->
+            <StackPanel x:Name="ScannerFieldsPanel" Visibility="Collapsed">
+                <NumberBox x:Name="ResolutionNumberBox" Header="Разрешение (DPI):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <TextBox x:Name="ScanTypeTextBox" Header="Тип сканера:" PlaceholderText="Планшетный, Протяжный, Ручной" Margin="0,0,0,15"/>
+                <NumberBox x:Name="MaxDocumentSizeNumberBox" Header="Макс. размер документа (A):" Value="4" Minimum="3" Maximum="5" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasADFCheckBox" Content="Автоподача документов" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для копира -->
+            <StackPanel x:Name="CopierFieldsPanel" Visibility="Collapsed">
+                <NumberBox x:Name="CopySpeedNumberBox" Header="Скорость копирования (стр/мин):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <NumberBox x:Name="CopierMaxPaperSizeNumberBox" Header="Макс. размер бумаги (A):" Value="4" Minimum="3" Maximum="5" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="CopierHasDuplexCheckBox" Content="Двустороннее копирование" Margin="0,0,0,15"/>
+                <NumberBox x:Name="PaperCapacityNumberBox" Header="Емкость лотка (листов):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для факса -->
+            <StackPanel x:Name="FaxFieldsPanel" Visibility="Collapsed">
+                <TextBox x:Name="TransmissionSpeedTextBox" Header="Скорость передачи:" PlaceholderText="33.6 Кбит/с" Margin="0,0,0,15"/>
+                <NumberBox x:Name="MemoryPagesNumberBox" Header="Память (страниц):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasAnsweringMachineCheckBox" Content="Автоответчик" Margin="0,0,0,15"/>
+                <TextBox x:Name="FaxConnectionTypeTextBox" Header="Тип подключения:" PlaceholderText="Аналоговый, Цифровой" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для планшета -->
+            <StackPanel x:Name="TabletFieldsPanel" Visibility="Collapsed">
+                <CheckBox x:Name="HasKeyboardCheckBox" Content="Поддержка клавиатуры" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasStylusCheckBox" Content="Поддержка стилуса" Margin="0,0,0,15"/>
+                <TextBox x:Name="ConnectivityTextBox" Header="Подключение:" PlaceholderText="Wi-Fi, Wi-Fi+Cellular" Margin="0,0,0,15"/>
+            </StackPanel>
+
+            <!-- Поля для смартфона -->
+            <StackPanel x:Name="SmartphoneFieldsPanel" Visibility="Collapsed">
+                <NumberBox x:Name="CameraMPNumberBox" Header="Камера (МП):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <NumberBox x:Name="StorageCapacityNumberBox" Header="Встроенная память (ГБ):" Value="0" Minimum="0" SpinButtonPlacementMode="Inline" Margin="0,0,0,15"/>
+                <CheckBox x:Name="HasNFCCheckBox" Content="NFC поддержка" Margin="0,0,0,15"/>
+                <TextBox x:Name="NetworkStandardTextBox" Header="Стандарт связи:" PlaceholderText="4G, 5G" Margin="0,0,0,15"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>
+
